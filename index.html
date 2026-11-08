@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AREDL Clone - All Rated Extreme Demons List</title>
+    <style>
+        :root {
+            --bg-dark: #0a0b10;
+            --bg-card: #141722;
+            --bg-card-hover: #1b2030;
+            --accent-red: #ff3355;
+            --accent-gold: #ffaa00;
+            --text-main: #f0f2f5;
+            --text-sub: #8b949e;
+            --border: #23283b;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; padding-bottom: 50px; }
+
+        header {
+            background: linear-gradient(180deg, #121520 0%, #0a0b10 100%);
+            border-bottom: 2px solid var(--accent-red);
+            padding: 2rem 1rem;
+            text-align: center;
+        }
+
+        header h1 { font-size: 2.2rem; color: #fff; text-transform: uppercase; letter-spacing: 2px; }
+        header p { color: var(--text-sub); font-size: 0.95rem; }
+
+        .nav-tabs { display: flex; justify-content: center; gap: 10px; margin-top: 15px; }
+        .tab-btn {
+            background: #191d2d; color: var(--text-main); border: 1px solid var(--border);
+            padding: 8px 18px; border-radius: 6px; cursor: pointer; font-weight: bold; transition: 0.2s;
+        }
+        .tab-btn.active, .tab-btn:hover { background: var(--accent-red); border-color: var(--accent-red); }
+
+        .container { max-width: 1000px; margin: 20px auto; padding: 0 15px; }
+
+        /* Controls */
+        .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+        .search-input {
+            flex: 1; min-width: 200px; padding: 10px 15px; border-radius: 6px;
+            background: var(--bg-card); border: 1px solid var(--border); color: #fff;
+        }
+
+        /* Level Card */
+        .level-card {
+            background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px;
+            margin-bottom: 15px; padding: 15px 20px; display: flex; justify-content: space-between;
+            align-items: center; transition: background 0.2s; position: relative;
+        }
+        .level-card:hover { background: var(--bg-card-hover); }
+
+        .rank { font-size: 1.8rem; font-weight: 800; color: var(--accent-red); width: 65px; }
+        .level-info { flex: 1; }
+        .level-title { font-size: 1.3rem; font-weight: bold; color: #fff; }
+        .level-meta { font-size: 0.85rem; color: var(--text-sub); }
+
+        .actions { display: flex; gap: 6px; }
+        .btn {
+            background: #202638; color: #fff; border: none; padding: 6px 12px;
+            border-radius: 4px; cursor: pointer; font-size: 0.85rem; font-weight: 600;
+        }
+        .btn:hover { opacity: 0.8; }
+        .btn-danger { background: #d93838; }
+        .btn-success { background: #28a745; }
+
+        /* Form */
+        .panel { display: none; background: var(--bg-card); padding: 25px; border-radius: 8px; border: 1px solid var(--border); }
+        .panel.active { display: block; }
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; margin-bottom: 5px; font-size: 0.9rem; color: var(--text-sub); }
+        .form-group input { width: 100%; padding: 10px; background: #0c0e14; border: 1px solid var(--border); border-radius: 4px; color: #fff; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>All Rated Extreme Demons List</h1>
+    <p>AREDL Management & Leaderboard Replica</p>
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('list')">List View</button>
+        <button class="tab-btn" onclick="switchTab('manage')">+ Add / Manage Demons</button>
+    </div>
+</header>
+
+<div class="container">
+    <!-- LIST VIEW -->
+    <div id="list-tab" class="tab-content">
+        <div class="controls">
+            <input type="text" id="search" class="search-input" placeholder="Search level or creator..." oninput="renderList()">
+        </div>
+        <div id="demon-list"></div>
+    </div>
+
+    <!-- MANAGEMENT TAB -->
+    <div id="manage-tab" class="panel">
+        <h2 style="margin-bottom: 15px;">Add New Extreme Demon</h2>
+        <form id="demon-form" onsubmit="addDemon(event)">
+            <div class="form-group">
+                <label>Level Name</label>
+                <input type="text" id="name" required placeholder="e.g. Acheron">
+            </div>
+            <div class="form-group">
+                <label>Creator</label>
+                <input type="text" id="creator" required placeholder="e.g. rual">
+            </div>
+            <div class="form-group">
+                <label>Publisher</label>
+                <input type="text" id="publisher" placeholder="e.g. Ryolle">
+            </div>
+            <div class="form-group">
+                <label>Rank Position (1 = Top Demon)</label>
+                <input type="number" id="rank" min="1" value="1">
+            </div>
+            <button type="submit" class="btn btn-success" style="padding: 10px 20px;">Save Level</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    let demons = JSON.parse(localStorage.getItem('aredl_demons')) || [
+        { id: 1, name: 'Avernus', creator: 'Paimon', publisher: 'Paimon' },
+        { id: 2, name: 'Acheron', creator: 'rual', publisher: 'Ryolle' },
+        { id: 3, name: 'Silent Clubstep', creator: 'Sailent', publisher: 'Sailent' }
+    ];
+
+    function save() {
+        localStorage.setItem('aredl_demons', JSON.stringify(demons));
+        renderList();
+    }
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('list-tab').style.display = tab === 'list' ? 'block' : 'none';
+        document.getElementById('manage-tab').classList.toggle('active', tab === 'manage');
+        if (event) event.target.classList.add('active');
+    }
+
+    function move(index, direction) {
+        const target = index + direction;
+        if (target < 0 || target >= demons.length) return;
+        const temp = demons[index];
+        demons[index] = demons[target];
+        demons[target] = temp;
+        save();
+    }
+
+    function deleteDemon(id) {
+        demons = demons.filter(d => d.id !== id);
+        save();
+    }
+
+    function addDemon(e) {
+        e.preventDefault();
+        const name = document.getElementById('name').value;
+        const creator = document.getElementById('creator').value;
+        const publisher = document.getElementById('publisher').value || creator;
+        let rank = parseInt(document.getElementById('rank').value) - 1;
+
+        const newDemon = { id: Date.now(), name, creator, publisher };
+        if (rank < 0) rank = 0;
+        demons.splice(rank, 0, newDemon);
+
+        save();
+        document.getElementById('demon-form').reset();
+        switchTab('list');
+    }
+
+    function renderList() {
+        const search = document.getElementById('search').value.toLowerCase();
+        const container = document.getElementById('demon-list');
+        container.innerHTML = '';
+
+        demons.forEach((demon, i) => {
+            if (demon.name.toLowerCase().includes(search) || demon.creator.toLowerCase().includes(search)) {
+                const card = document.createElement('div');
+                card.className = 'level-card';
+                card.innerHTML = `
+                    <div class="rank">#${i + 1}</div>
+                    <div class="level-info">
+                        <div class="level-title">${demon.name}</div>
+                        <div class="level-meta">By <strong>${demon.creator}</strong> | Published by ${demon.publisher}</div>
+                    </div>
+                    <div class="actions">
+                        <button class="btn" onclick="move(${i}, -1)">▲</button>
+                        <button class="btn" onclick="move(${i}, 1)">▼</button>
+                        <button class="btn btn-danger" onclick="deleteDemon(${demon.id})">Delete</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        });
+    }
+
+    renderList();
+</script>
+</body>
+</html>
