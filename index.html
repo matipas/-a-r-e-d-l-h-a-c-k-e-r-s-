@@ -6,526 +6,534 @@
     <title>AREDL - All Rated Extreme Demons List</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --aredl-bg: #0b0c10;
-            --aredl-card-bg: #12141c;
-            --aredl-card-hover: #191c28;
-            --aredl-red: #ff3355;
-            --aredl-red-glow: rgba(255, 51, 85, 0.25);
-            --aredl-gold: #ffaa00;
-            --aredl-green: #00e676;
-            --aredl-text-primary: #ffffff;
-            --aredl-text-secondary: #9aa3b4;
-            --aredl-border: #1e2230;
-            --aredl-font: 'Outfit', sans-serif;
+            --bg-main: #0c0d12;
+            --bg-card: #141620;
+            --bg-card-hover: #1b1e2c;
+            --accent-red: #ff2a4d;
+            --accent-red-glow: rgba(255, 42, 77, 0.2);
+            --accent-yellow: #f39c12;
+            --accent-green: #2ecc71;
+            --text-main: #ffffff;
+            --text-sub: #8c95a7;
+            --border-color: #212536;
+            --font-family: 'Lexend', sans-serif;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--aredl-font); }
-        body { background-color: var(--aredl-bg); color: var(--aredl-text-primary); padding-bottom: 80px; min-height: 100vh; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-family); }
+        body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding-bottom: 60px; }
 
+        /* Top Navigation Header */
         header {
-            background: linear-gradient(180deg, #151824 0%, var(--aredl-bg) 100%);
-            border-bottom: 2px solid var(--aredl-red);
-            padding: 2rem 1rem; text-align: center;
+            background: #11131c;
+            border-bottom: 1px solid var(--border-color);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
-        .logo { font-size: 3rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; line-height: 1; }
-        .logo span { color: var(--aredl-red); text-shadow: 0 0 12px var(--aredl-red-glow); }
-        .subtitle { color: var(--aredl-text-secondary); font-size: 0.95rem; font-weight: 600; margin-top: 8px; text-transform: uppercase; letter-spacing: 1px; }
-
-        .nav-bar { display: flex; justify-content: center; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
-        .nav-btn {
-            background: #171a26; color: var(--aredl-text-primary); border: 1px solid var(--aredl-border);
-            padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: all 0.2s ease;
-            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;
+        .header-brand { display: flex; align-items: center; gap: 12px; }
+        .brand-logo { font-size: 1.6rem; font-weight: 800; letter-spacing: 1px; color: #fff; }
+        .brand-logo span { color: var(--accent-red); }
+        
+        .header-nav { display: flex; gap: 8px; align-items: center; }
+        .nav-link {
+            background: transparent; border: 1px solid var(--border-color); color: var(--text-sub);
+            padding: 8px 16px; border-radius: 6px; font-weight: 600; font-size: 0.85rem; cursor: pointer; transition: all 0.2s;
         }
-        .nav-btn.active, .nav-btn:hover { background: var(--aredl-red); border-color: var(--aredl-red); color: #fff; box-shadow: 0 4px 15px var(--aredl-red-glow); }
-        .nav-btn.admin-btn { border-color: var(--aredl-gold); color: var(--aredl-gold); }
-        .nav-btn.admin-btn:hover, .nav-btn.admin-btn.logged-in { background: var(--aredl-gold); color: #000; box-shadow: 0 4px 15px rgba(255,170,0,0.3); }
+        .nav-link.active, .nav-link:hover { color: #fff; background: var(--bg-card-hover); border-color: var(--text-sub); }
+        .nav-link.admin-pill { border-color: var(--accent-yellow); color: var(--accent-yellow); }
+        .nav-link.admin-pill.active-admin { background: var(--accent-yellow); color: #000; }
 
-        .container { max-width: 1000px; margin: 30px auto; padding: 0 16px; }
+        .main-layout { max-width: 1300px; margin: 24px auto; padding: 0 16px; display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
+        @media(max-width: 900px) { .main-layout { grid-template-columns: 1fr; } }
 
-        .search-box {
-            width: 100%; padding: 14px 20px; background: var(--aredl-card-bg); border: 1px solid var(--aredl-border);
-            border-radius: 10px; color: #fff; font-size: 1rem; outline: none; margin-bottom: 20px; transition: border-color 0.2s;
+        /* Sidebar Stats Panel */
+        .sidebar { display: flex; flex-direction: column; gap: 16px; }
+        .stat-card {
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px;
         }
-        .search-box:focus { border-color: var(--aredl-red); }
+        .stat-card h3 { font-size: 0.9rem; color: var(--text-sub); text-transform: uppercase; font-weight: 700; margin-bottom: 8px; }
+        .stat-value { font-size: 1.8rem; font-weight: 800; color: #fff; }
 
-        .tab-panel { display: none; }
-        .tab-panel.active { display: block; }
-
-        /* Demon Cards */
-        .demon-card {
-            background: var(--aredl-card-bg); border: 1px solid var(--aredl-border); border-radius: 12px;
-            margin-bottom: 12px; padding: 18px 24px; display: flex; align-items: center; justify-content: space-between;
-            cursor: pointer; transition: transform 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+        .filter-input {
+            width: 100%; background: #090a0f; border: 1px solid var(--border-color);
+            padding: 12px 16px; border-radius: 8px; color: #fff; font-size: 0.9rem; outline: none; margin-bottom: 12px;
         }
-        .demon-card:hover { background-color: var(--aredl-card-hover); border-color: #2e354a; transform: translateY(-2px); }
+        .filter-input:focus { border-color: var(--accent-red); }
 
-        .card-left { display: flex; align-items: center; gap: 20px; }
-        .rank { font-size: 2.2rem; font-weight: 900; color: var(--aredl-red); min-width: 65px; font-style: italic; }
-        .demon-name { font-size: 1.4rem; font-weight: 800; color: #fff; }
-        .demon-sub { font-size: 0.9rem; color: var(--aredl-text-secondary); margin-top: 2px; }
-        .demon-sub strong { color: #e1e6f0; }
-
-        .card-right { display: flex; align-items: center; gap: 12px; }
-        .badge {
-            background: #181b28; padding: 6px 12px; border-radius: 6px; font-size: 0.82rem;
-            font-weight: 700; border: 1px solid var(--aredl-border);
+        /* List Stack */
+        .list-container { display: flex; flex-direction: column; gap: 10px; }
+        
+        .demon-row {
+            background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px;
+            padding: 12px 18px; display: flex; align-items: center; justify-content: space-between;
+            cursor: pointer; transition: background 0.15s, transform 0.15s, border-color 0.15s;
         }
-        .badge-points { color: var(--aredl-gold); border-color: rgba(255, 170, 0, 0.3); background: rgba(255, 170, 0, 0.08); }
+        .demon-row:hover { background: var(--bg-card-hover); border-color: #313852; transform: translateX(4px); }
 
-        /* Panels & Tables */
-        .panel-box { background: var(--aredl-card-bg); border: 1px solid var(--aredl-border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
-        .panel-box h3 { color: var(--aredl-gold); margin-bottom: 15px; font-size: 1.25rem; font-weight: 800; text-transform: uppercase; }
+        .row-left { display: flex; align-items: center; gap: 18px; }
+        .row-rank { font-size: 1.6rem; font-weight: 800; color: var(--accent-red); min-width: 50px; font-style: italic; }
+        .row-thumb { width: 85px; height: 48px; border-radius: 6px; object-fit: cover; background: #08090d; border: 1px solid var(--border-color); }
+        .row-info h4 { font-size: 1.1rem; font-weight: 700; color: #fff; }
+        .row-info p { font-size: 0.82rem; color: var(--text-sub); margin-top: 2px; }
+        .row-info p strong { color: #d0d6e0; }
 
-        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
-        .form-group label { display: block; font-size: 0.82rem; color: var(--aredl-text-secondary); margin-bottom: 6px; font-weight: 700; text-transform: uppercase; }
-        .form-group input, .form-group select {
-            width: 100%; padding: 11px 14px; background: #08090d; border: 1px solid var(--aredl-border);
-            border-radius: 8px; color: #fff; outline: none; font-size: 0.9rem;
+        .row-right { display: flex; align-items: center; gap: 12px; }
+        .tag { background: #1a1e2c; border: 1px solid var(--border-color); padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; }
+        .tag-pts { color: var(--accent-yellow); background: rgba(243, 156, 18, 0.08); border-color: rgba(243, 156, 18, 0.25); }
+
+        /* Panels & Forms */
+        .content-panel { display: none; }
+        .content-panel.active { display: block; }
+        
+        .admin-box { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 24px; margin-bottom: 20px; }
+        .admin-box h3 { color: var(--accent-yellow); font-size: 1.1rem; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; }
+
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+        .field-group label { display: block; font-size: 0.78rem; font-weight: 700; color: var(--text-sub); margin-bottom: 6px; text-transform: uppercase; }
+        .field-group input, .field-group select {
+            width: 100%; background: #090a0f; border: 1px solid var(--border-color); padding: 10px 14px;
+            border-radius: 8px; color: #fff; font-size: 0.9rem; outline: none;
         }
-        .form-group input:focus, .form-group select:focus { border-color: var(--aredl-red); }
+        .field-group input:focus { border-color: var(--accent-red); }
 
-        .btn-primary {
-            background: var(--aredl-red); color: #fff; border: none; padding: 12px 24px;
-            font-weight: 800; border-radius: 8px; cursor: pointer; margin-top: 18px; font-size: 0.9rem;
-            text-transform: uppercase; letter-spacing: 0.5px; transition: opacity 0.2s;
+        .btn-main {
+            background: var(--accent-red); color: #fff; border: none; padding: 10px 20px;
+            font-weight: 700; border-radius: 8px; cursor: pointer; margin-top: 14px; text-transform: uppercase; font-size: 0.85rem;
         }
-        .btn-primary:hover { opacity: 0.9; }
+        .btn-main:hover { opacity: 0.9; }
 
-        .btn-sm {
-            background: #1f2434; color: #fff; border: 1px solid var(--aredl-border);
-            padding: 6px 10px; border-radius: 6px; cursor: pointer; font-size: 0.8rem; font-weight: 800;
-        }
-        .btn-sm:hover { opacity: 0.85; }
-        .btn-green { background: var(--aredl-green); color: #000; border: none; }
-        .btn-danger { background: var(--aredl-red); color: #fff; border: none; }
-        .btn-warn { background: var(--aredl-gold); color: #000; border: none; }
+        .btn-action { background: #22273a; color: #fff; border: 1px solid var(--border-color); padding: 5px 10px; border-radius: 5px; font-size: 0.75rem; font-weight: 700; cursor: pointer; }
+        .btn-action:hover { opacity: 0.8; }
+        .btn-green { background: var(--accent-green); color: #000; border: none; }
+        .btn-red { background: var(--accent-red); color: #fff; border: none; }
 
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9rem; }
-        th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid var(--aredl-border); }
-        th { color: var(--aredl-text-secondary); font-size: 0.78rem; text-transform: uppercase; font-weight: 800; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.88rem; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { color: var(--text-sub); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; }
 
-        .status-badge { padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; }
-        .status-pending { background: rgba(255, 170, 0, 0.15); color: var(--aredl-gold); border: 1px solid rgba(255, 170, 0, 0.3); }
-        .status-approved { background: rgba(0, 230, 118, 0.15); color: var(--aredl-green); border: 1px solid rgba(0, 230, 118, 0.3); }
-        .status-denied { background: rgba(255, 51, 85, 0.15); color: var(--aredl-red); border: 1px solid rgba(255, 51, 85, 0.3); }
+        .status-pill { padding: 3px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
+        .st-pending { background: rgba(243, 156, 18, 0.15); color: var(--accent-yellow); }
+        .st-approved { background: rgba(46, 204, 113, 0.15); color: var(--accent-green); }
+        .st-denied { background: rgba(255, 42, 77, 0.15); color: var(--accent-red); }
 
-        /* Modal Overlay */
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none;
-            justify-content: center; align-items: center; z-index: 100; padding: 20px;
-        }
-        .modal-overlay.active { display: flex; }
-        .modal-box {
-            background: var(--aredl-card-bg); border: 1px solid var(--aredl-border); border-radius: 14px;
-            max-width: 720px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 28px; position: relative;
-        }
-        .close-btn { position: absolute; top: 18px; right: 22px; font-size: 1.8rem; cursor: pointer; color: var(--aredl-text-secondary); }
-        .video-container { margin-top: 18px; position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 10px; }
-        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
+        /* Modal View */
+        .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100; padding: 16px; }
+        .modal-bg.open { display: flex; }
+        .modal-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 24px; position: relative; }
+        .modal-close { position: absolute; top: 16px; right: 20px; font-size: 1.6rem; cursor: pointer; color: var(--text-sub); }
+        .video-box { margin-top: 16px; position: relative; padding-bottom: 56.25%; height: 0; border-radius: 8px; overflow: hidden; background: #000; }
+        .video-box iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="logo">AR<span>EDL</span></div>
-    <div class="subtitle">All Rated Extreme Demons List</div>
-    <div class="nav-bar">
-        <button class="nav-btn active" onclick="switchTab('list')">Main List</button>
-        <button class="nav-btn" onclick="switchTab('submit')">Submit Record</button>
-        <button class="nav-btn admin-btn" id="admin-nav" onclick="toggleAdmin()">⚙️ Management Panel</button>
+    <div class="header-brand">
+        <div class="brand-logo">AR<span>EDL</span></div>
+    </div>
+    <div class="header-nav">
+        <button class="nav-link active" onclick="switchView('list', this)">List</button>
+        <button class="nav-link" onclick="switchView('submit', this)">Submit Record</button>
+        <button class="nav-link admin-pill" id="admin-nav-btn" onclick="triggerAdmin()">⚙️ Admin Panel</button>
     </div>
 </header>
 
-<div class="container">
-
-    <!-- MAIN LIST TAB -->
-    <div id="list-tab" class="tab-panel active">
-        <input type="text" id="search" class="search-box" placeholder="Search level name or creator..." oninput="renderList()">
-        <div id="demon-list"></div>
-    </div>
-
-    <!-- SUBMIT RECORD TAB -->
-    <div id="submit-tab" class="tab-panel">
-        <div class="panel-box">
-            <h3>Submit Level Completion</h3>
-            <form onsubmit="submitRecord(event)">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Player Name</label>
-                        <input type="text" id="rec-player" required placeholder="e.g. Zoink">
-                    </div>
-                    <div class="form-group">
-                        <label>Level Name</label>
-                        <select id="rec-level" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Progress (%)</label>
-                        <input type="number" id="rec-progress" min="1" max="100" value="100" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Video Link (YouTube ID / URL)</label>
-                        <input type="text" id="rec-video" required placeholder="https://youtu.be/...">
-                    </div>
-                    <div class="form-group">
-                        <label>Refresh Rate / FPS</label>
-                        <input type="text" id="rec-fps" placeholder="e.g. 360Hz">
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary">Submit Record for Review</button>
-            </form>
+<div class="main-layout">
+    
+    <!-- LEFT SIDEBAR -->
+    <div class="sidebar">
+        <div class="stat-card">
+            <h3>Total Extreme Demons</h3>
+            <div class="stat-value" id="stat-total-demons">0</div>
+        </div>
+        <div class="stat-card">
+            <h3>Total Records</h3>
+            <div class="stat-value" id="stat-total-records">0</div>
+        </div>
+        <div class="stat-card" style="padding: 14px;">
+            <input type="text" id="search-bar" class="filter-input" placeholder="Filter levels or creators..." oninput="renderApp()">
         </div>
     </div>
 
-    <!-- MANAGEMENT TAB -->
-    <div id="manage-tab" class="tab-panel">
-        
-        <!-- 1. ADD LEVEL -->
-        <div class="panel-box">
-            <h3>1. Add / Insert Demon Level</h3>
-            <form onsubmit="addDemon(event)">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Level Name</label>
-                        <input type="text" id="m-name" required placeholder="e.g. Tidal Wave">
-                    </div>
-                    <div class="form-group">
-                        <label>Creator</label>
-                        <input type="text" id="m-creator" required placeholder="e.g. OniLink">
-                    </div>
-                    <div class="form-group">
-                        <label>Publisher</label>
-                        <input type="text" id="m-publisher" placeholder="e.g. OniLink">
-                    </div>
-                    <div class="form-group">
-                        <label>Level ID</label>
-                        <input type="text" id="m-levelId" placeholder="e.g. 95204812">
-                    </div>
-                    <div class="form-group">
-                        <label>Enjoyability (%)</label>
-                        <input type="number" id="m-rating" min="0" max="100" value="75">
-                    </div>
-                    <div class="form-group">
-                        <label>Rank Position (1 = Top 1)</label>
-                        <input type="number" id="m-rank" min="1" value="1">
-                    </div>
-                    <div class="form-group">
-                        <label>YouTube Video ID</label>
-                        <input type="text" id="m-yt" placeholder="e.g. 86m67v8gJkg">
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary">Save Level to AREDL</button>
-            </form>
+    <!-- RIGHT CONTENT AREA -->
+    <div>
+        <!-- LIST VIEW -->
+        <div id="view-list" class="content-panel active">
+            <div class="list-container" id="list-container-el"></div>
         </div>
 
-        <!-- 2. PENDING RECORDS -->
-        <div class="panel-box">
-            <h3>2. Record Submissions (Accept / Deny)</h3>
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Player</th>
-                            <th>Level</th>
-                            <th>Progress</th>
-                            <th>FPS</th>
-                            <th>Status</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="records-table"></tbody>
-                </table>
+        <!-- SUBMIT RECORD VIEW -->
+        <div id="view-submit" class="content-panel">
+            <div class="admin-box">
+                <h3>Submit Completion Record</h3>
+                <form onsubmit="handleRecordSubmit(event)">
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label>Your Username</label>
+                            <input type="text" id="sub-player" required placeholder="e.g. Zoink">
+                        </div>
+                        <div class="field-group">
+                            <label>Level Name</label>
+                            <select id="sub-level" required></select>
+                        </div>
+                        <div class="field-group">
+                            <label>Progress (%)</label>
+                            <input type="number" id="sub-prog" min="1" max="100" value="100" required>
+                        </div>
+                        <div class="field-group">
+                            <label>YouTube Link</label>
+                            <input type="text" id="sub-vid" required placeholder="https://youtu.be/...">
+                        </div>
+                        <div class="field-group">
+                            <label>FPS / Refresh Rate</label>
+                            <input type="text" id="sub-fps" placeholder="e.g. 360Hz">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-main">Submit to Staff</button>
+                </form>
             </div>
         </div>
 
-        <!-- 3. BAN MANAGER -->
-        <div class="panel-box">
-            <h3>3. Ban List Manager</h3>
-            <form onsubmit="banPlayer(event)" style="margin-bottom: 20px;">
-                <div class="form-grid">
-                    <div class="form-group">
-                        <label>Player Name to Ban</label>
-                        <input type="text" id="ban-username" required placeholder="e.g. Cheater123">
+        <!-- ADMIN MANAGEMENT VIEW -->
+        <div id="view-admin" class="content-panel">
+            
+            <!-- ADD LEVEL -->
+            <div class="admin-box">
+                <h3>1. Add / Insert Demon</h3>
+                <form onsubmit="handleAddDemon(event)">
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label>Level Name</label>
+                            <input type="text" id="adm-name" required placeholder="e.g. Nullscapes">
+                        </div>
+                        <div class="field-group">
+                            <label>Creator</label>
+                            <input type="text" id="adm-creator" required placeholder="e.g. Diamond">
+                        </div>
+                        <div class="field-group">
+                            <label>Level ID</label>
+                            <input type="text" id="adm-id" placeholder="e.g. 98124912">
+                        </div>
+                        <div class="field-group">
+                            <label>Enjoyment (%)</label>
+                            <input type="number" id="adm-enjoy" min="0" max="100" value="70">
+                        </div>
+                        <div class="field-group">
+                            <label>Rank Position</label>
+                            <input type="number" id="adm-rank" min="1" value="1">
+                        </div>
+                        <div class="field-group">
+                            <label>YouTube Video ID</label>
+                            <input type="text" id="adm-yt" placeholder="e.g. dQw4w9WgXcQ">
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label>Ban Reason</label>
-                        <input type="text" id="ban-reason" placeholder="e.g. Speedhack / Botting">
-                    </div>
-                </div>
-                <button type="submit" class="btn-primary btn-danger">Ban Player</button>
-            </form>
-
-            <div style="overflow-x: auto;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Banned Player</th>
-                            <th>Reason</th>
-                            <th>Date</th>
-                            <th>Action</th>
-                        </tr>
-                    </thead>
-                    <tbody id="bans-table"></tbody>
-                </table>
+                    <button type="submit" class="btn-main">Save Demon</button>
+                </form>
             </div>
+
+            <!-- MANAGE RECORDS -->
+            <div class="admin-box">
+                <h3>2. Moderation: Records Review</h3>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Player</th>
+                                <th>Level</th>
+                                <th>Progress</th>
+                                <th>FPS</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-records-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- BAN LIST -->
+            <div class="admin-box">
+                <h3>3. Ban List Control</h3>
+                <form onsubmit="handleBan(event)" style="margin-bottom: 14px;">
+                    <div class="form-grid">
+                        <div class="field-group">
+                            <label>Username to Ban</label>
+                            <input type="text" id="ban-name" required placeholder="CheaterName">
+                        </div>
+                        <div class="field-group">
+                            <label>Reason</label>
+                            <input type="text" id="ban-reason" placeholder="Macro / Botting">
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-main btn-red">Ban Player</button>
+                </form>
+                <div style="overflow-x:auto;">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Banned User</th>
+                                <th>Reason</th>
+                                <th>Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-bans-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+
         </div>
 
     </div>
 </div>
 
-<!-- LEVEL DETAIL MODAL -->
-<div id="modal" class="modal-overlay" onclick="closeModal(event)">
-    <div class="modal-box" onclick="event.stopPropagation()">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
-        <h2 id="md-title">Level Name</h2>
-        <p id="md-meta" style="color: var(--aredl-text-secondary); margin-bottom: 12px; font-weight: 600;"></p>
-        <div id="md-video" class="video-container"></div>
-        <h3 style="margin-top: 22px; color: var(--aredl-gold); font-size: 1.15rem; font-weight: 800; text-transform: uppercase;">Accepted Records</h3>
-        <ul id="md-records" style="margin-top: 10px; padding-left: 20px; color: var(--aredl-text-secondary); font-size: 0.95rem;"></ul>
+<!-- LEVEL DETAILS MODAL -->
+<div id="details-modal" class="modal-bg" onclick="closeModal(event)">
+    <div class="modal-card" onclick="event.stopPropagation()">
+        <span class="modal-close" onclick="closeModal()">&times;</span>
+        <h2 id="modal-title" style="font-size: 1.5rem; font-weight: 800;"></h2>
+        <p id="modal-subtitle" style="color: var(--text-sub); margin-top: 4px; font-weight: 600;"></p>
+        <div id="modal-video-container" class="video-box"></div>
+        <h3 style="margin-top: 20px; font-size: 1.05rem; font-weight: 700; color: var(--accent-yellow); text-transform: uppercase;">Approved Completions</h3>
+        <ul id="modal-records-list" style="margin-top: 8px; padding-left: 18px; color: var(--text-sub); font-size: 0.9rem;"></ul>
     </div>
 </div>
 
 <script>
-    let demons = JSON.parse(localStorage.getItem('aredl_demons_v4')) || [
-        { id: 1, name: 'Avernus', creator: 'Paimon', publisher: 'Paimon', levelId: '89230192', rating: 68, yt: '86m67v8gJkg' },
-        { id: 2, name: 'Acheron', creator: 'rual', publisher: 'Ryolle', levelId: '84368584', rating: 82, yt: '7XqD3nZcMzA' },
-        { id: 3, name: 'Silent Clubstep', creator: 'Sailent', publisher: 'Paqter', levelId: '82234057', rating: 45, yt: 'N3O6w7d9T8w' }
-    ];
+    let appData = JSON.parse(localStorage.getItem('aredl_exact_db_v1')) || {
+        demons: [
+            { id: 1, name: 'Avernus', creator: 'Paimon', levelId: '89230192', enjoy: 65, yt: '86m67v8gJkg' },
+            { id: 2, name: 'Acheron', creator: 'rual', levelId: '84368584', enjoy: 80, yt: '7XqD3nZcMzA' },
+            { id: 3, name: 'Silent Clubstep', creator: 'Sailent', levelId: '82234057', enjoy: 42, yt: 'N3O6w7d9T8w' }
+        ],
+        records: [
+            { id: 101, player: 'Zoink', levelName: 'Avernus', progress: 100, fps: '360Hz', status: 'approved' },
+            { id: 102, player: 'Trick', levelName: 'Acheron', progress: 100, fps: '360Hz', status: 'approved' }
+        ],
+        bans: []
+    };
 
-    let records = JSON.parse(localStorage.getItem('aredl_records_v4')) || [
-        { id: 101, player: 'Zoink', levelName: 'Avernus', progress: 100, fps: '360Hz', status: 'approved', video: 'https://youtube.com' },
-        { id: 102, player: 'Trick', levelName: 'Acheron', progress: 100, fps: '360Hz', status: 'approved', video: 'https://youtube.com' }
-    ];
+    let userIsAdmin = false;
 
-    let bannedPlayers = JSON.parse(localStorage.getItem('aredl_banned_v4')) || [
-        { player: 'SpaceUK', reason: 'Hacked completions', date: '2026-01-10' }
-    ];
-
-    let isAdmin = false;
-
-    function saveData() {
-        localStorage.setItem('aredl_demons_v4', JSON.stringify(demons));
-        localStorage.setItem('aredl_records_v4', JSON.stringify(records));
-        localStorage.setItem('aredl_banned_v4', JSON.stringify(bannedPlayers));
-        renderList();
-        renderRecords();
-        renderBans();
-        populateLevelSelect();
+    function saveState() {
+        localStorage.setItem('aredl_exact_db_v1', JSON.stringify(appData));
+        renderApp();
     }
 
-    function toggleAdmin() {
-        if (!isAdmin) {
-            const pwd = prompt("Enter Management Password (default: admin123):");
-            if (pwd === "admin123") {
-                isAdmin = true;
-                document.getElementById('admin-nav').classList.add('logged-in');
-                switchTab('manage');
+    function triggerAdmin() {
+        if (!userIsAdmin) {
+            const pass = prompt("Enter AREDL Admin Password (default: admin123):");
+            if (pass === "admin123") {
+                userIsAdmin = true;
+                document.getElementById('admin-nav-btn').classList.add('active-admin');
+                switchView('admin', document.getElementById('admin-nav-btn'));
             } else {
-                alert("Incorrect Password!");
+                alert("Incorrect password.");
             }
         } else {
-            switchTab('manage');
+            switchView('admin', document.getElementById('admin-nav-btn'));
         }
     }
 
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-        document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-        
-        document.getElementById(`${tabId}-tab`).classList.add('active');
-        if (event && event.target) event.target.classList.add('active');
+    function switchView(viewName, btnEl) {
+        document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(b => b.classList.remove('active'));
+
+        document.getElementById(`view-${viewName}`).classList.add('active');
+        if (btnEl) btnEl.classList.add('active');
     }
 
-    function move(index, dir) {
-        const target = index + dir;
-        if (target < 0 || target >= demons.length) return;
-        const temp = demons[index];
-        demons[index] = demons[target];
-        demons[target] = temp;
-        saveData();
-    }
-
-    function deleteDemon(id) {
-        if (confirm("Delete this demon level permanently?")) {
-            demons = demons.filter(d => d.id !== id);
-            saveData();
-        }
-    }
-
-    function addDemon(e) {
+    function handleAddDemon(e) {
         e.preventDefault();
-        const name = document.getElementById('m-name').value;
-        const creator = document.getElementById('m-creator').value;
-        const publisher = document.getElementById('m-publisher').value || creator;
-        const levelId = document.getElementById('m-levelId').value || 'N/A';
-        const rating = parseInt(document.getElementById('m-rating').value) || 50;
-        const yt = document.getElementById('m-yt').value || '';
-        let rank = parseInt(document.getElementById('m-rank').value) - 1;
+        const name = document.getElementById('adm-name').value;
+        const creator = document.getElementById('adm-creator').value;
+        const levelId = document.getElementById('adm-id').value || 'N/A';
+        const enjoy = parseInt(document.getElementById('adm-enjoy').value) || 50;
+        const yt = document.getElementById('adm-yt').value || '';
+        let rank = parseInt(document.getElementById('adm-rank').value) - 1;
 
-        const newDemon = { id: Date.now(), name, creator, publisher, levelId, rating, yt };
+        const newObj = { id: Date.now(), name, creator, levelId, enjoy, yt };
         if (rank < 0) rank = 0;
-        demons.splice(rank, 0, newDemon);
+        appData.demons.splice(rank, 0, newObj);
 
-        saveData();
+        saveState();
         e.target.reset();
-        alert("Level saved to AREDL!");
+        alert("Demon added successfully!");
     }
 
-    function submitRecord(e) {
+    function handleRecordSubmit(e) {
         e.preventDefault();
-        const player = document.getElementById('rec-player').value.trim();
+        const player = document.getElementById('sub-player').value.trim();
 
-        if (bannedPlayers.some(b => b.player.toLowerCase() === player.toLowerCase())) {
-            alert("Error: This player username is banned from submitting records.");
+        if (appData.bans.some(b => b.player.toLowerCase() === player.toLowerCase())) {
+            alert("This user is banned from submitting records.");
             return;
         }
 
-        const levelName = document.getElementById('rec-level').value;
-        const progress = document.getElementById('rec-progress').value;
-        const video = document.getElementById('rec-video').value;
-        const fps = document.getElementById('rec-fps').value || 'Unknown FPS';
+        const levelName = document.getElementById('sub-level').value;
+        const progress = document.getElementById('sub-prog').value;
+        const vid = document.getElementById('sub-vid').value;
+        const fps = document.getElementById('sub-fps').value || 'N/A';
 
-        records.push({ id: Date.now(), player, levelName, progress, video, fps, status: 'pending' });
-        saveData();
+        appData.records.push({ id: Date.now(), player, levelName, progress, vid, fps, status: 'pending' });
+        saveState();
         e.target.reset();
-        alert("Record submitted! Pending review.");
-        switchTab('list');
+        alert("Record submitted for staff verification.");
+        switchView('list', document.querySelectorAll('.nav-link')[0]);
     }
 
-    function setRecordStatus(id, newStatus) {
-        const r = records.find(item => item.id === id);
-        if (r) {
-            r.status = newStatus;
-            saveData();
+    function setRecStatus(id, status) {
+        const rec = appData.records.find(r => r.id === id);
+        if (rec) {
+            rec.status = status;
+            saveState();
         }
     }
 
-    function banPlayer(e) {
+    function handleBan(e) {
         e.preventDefault();
-        const player = document.getElementById('ban-username').value.trim();
-        const reason = document.getElementById('ban-reason').value || 'No reason provided';
+        const player = document.getElementById('ban-name').value.trim();
+        const reason = document.getElementById('ban-reason').value || 'Cheating';
         
-        if (!bannedPlayers.some(b => b.player.toLowerCase() === player.toLowerCase())) {
-            bannedPlayers.push({ player, reason, date: new Date().toISOString().split('T')[0] });
-            records.forEach(r => {
+        if (!appData.bans.some(b => b.player.toLowerCase() === player.toLowerCase())) {
+            appData.bans.push({ player, reason, date: new Date().toISOString().split('T')[0] });
+            appData.records.forEach(r => {
                 if (r.player.toLowerCase() === player.toLowerCase()) r.status = 'denied';
             });
-            saveData();
+            saveState();
             e.target.reset();
-            alert(`Player "${player}" banned.`);
+            alert(`Banned user: ${player}`);
         }
     }
 
-    function unbanPlayer(player) {
-        bannedPlayers = bannedPlayers.filter(b => b.player.toLowerCase() !== player.toLowerCase());
-        saveData();
+    function unbanUser(player) {
+        appData.bans = appData.bans.filter(b => b.player.toLowerCase() !== player.toLowerCase());
+        saveState();
     }
 
-    function populateLevelSelect() {
-        const sel = document.getElementById('rec-level');
-        sel.innerHTML = demons.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+    function moveDemon(idx, dir) {
+        const target = idx + dir;
+        if (target < 0 || target >= appData.demons.length) return;
+        const tmp = appData.demons[idx];
+        appData.demons[idx] = appData.demons[target];
+        appData.demons[target] = tmp;
+        saveState();
     }
 
-    function openModal(index) {
-        const d = demons[index];
-        document.getElementById('md-title').innerText = `#${index + 1} - ${d.name}`;
-        document.getElementById('md-meta').innerHTML = `Created by <strong>${d.creator}</strong> | ID: ${d.levelId} | Enjoyability: ${d.rating}%`;
+    function removeDemon(id) {
+        if (confirm("Delete demon?")) {
+            appData.demons = appData.demons.filter(d => d.id !== id);
+            saveState();
+        }
+    }
+
+    function openModal(idx) {
+        const d = appData.demons[idx];
+        document.getElementById('modal-title').innerText = `#${idx + 1} — ${d.name}`;
+        document.getElementById('modal-subtitle').innerHTML = `Creator: <strong>${d.creator}</strong> | Level ID: ${d.levelId} | Enjoyment: ${d.enjoy}%`;
         
-        const videoBox = document.getElementById('md-video');
+        const vidBox = document.getElementById('modal-video-container');
         if (d.yt) {
-            videoBox.style.display = 'block';
-            videoBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${d.yt}" allowfullscreen></iframe>`;
+            vidBox.style.display = 'block';
+            vidBox.innerHTML = `<iframe src="https://www.youtube.com/embed/${d.yt}" allowfullscreen></iframe>`;
         } else {
-            videoBox.style.display = 'none';
+            vidBox.style.display = 'none';
         }
 
-        const approvedRecs = records.filter(r => r.levelName === d.name && r.status === 'approved');
-        const recList = document.getElementById('md-records');
-        if (approvedRecs.length > 0) {
-            recList.innerHTML = approvedRecs.map(r => `<li><strong>${r.player}</strong> — ${r.progress}% (${r.fps})</li>`).join('');
-        } else {
-            recList.innerHTML = '<li>No approved records yet.</li>';
-        }
+        const approved = appData.records.filter(r => r.levelName === d.name && r.status === 'approved');
+        const ul = document.getElementById('modal-records-list');
+        ul.innerHTML = approved.length ? approved.map(r => `<li><strong>${r.player}</strong> — ${r.progress}% (${r.fps})</li>`).join('') : '<li>No approved records yet.</li>';
 
-        document.getElementById('modal').classList.add('active');
+        document.getElementById('details-modal').classList.add('open');
     }
 
     function closeModal() {
-        document.getElementById('modal').classList.remove('active');
-        document.getElementById('md-video').innerHTML = '';
+        document.getElementById('details-modal').classList.remove('open');
+        document.getElementById('modal-video-container').innerHTML = '';
     }
 
-    function renderList() {
-        const search = document.getElementById('search').value.toLowerCase();
-        const container = document.getElementById('demon-list');
-        container.innerHTML = '';
+    function renderApp() {
+        document.getElementById('stat-total-demons').innerText = appData.demons.length;
+        document.getElementById('stat-total-records').innerText = appData.records.filter(r => r.status === 'approved').length;
 
-        demons.forEach((d, i) => {
-            if (d.name.toLowerCase().includes(search) || d.creator.toLowerCase().includes(search)) {
-                const card = document.createElement('div');
-                card.className = 'demon-card';
-                card.onclick = () => openModal(i);
+        // Populate Level Dropdown
+        const selectEl = document.getElementById('sub-level');
+        selectEl.innerHTML = appData.demons.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
 
-                const points = (100 - i * 2 > 5) ? (100 - i * 2).toFixed(1) : "5.0";
+        // Render Demon List
+        const filterText = document.getElementById('search-bar').value.toLowerCase();
+        const listContainer = document.getElementById('list-container-el');
+        listContainer.innerHTML = '';
 
-                card.innerHTML = `
-                    <div class="card-left">
-                        <div class="rank">#${i + 1}</div>
-                        <div>
-                            <div class="demon-name">${d.name}</div>
-                            <div class="demon-sub">By <strong>${d.creator}</strong> ${d.publisher !== d.creator ? `(Pub: ${d.publisher})` : ''}</div>
+        appData.demons.forEach((d, idx) => {
+            if (d.name.toLowerCase().includes(filterText) || d.creator.toLowerCase().includes(filterText)) {
+                const row = document.createElement('div');
+                row.className = 'demon-row';
+                row.onclick = () => openModal(idx);
+
+                const points = Math.max(5.0, (100 - idx * 2)).toFixed(1);
+                // Standard Geometry Dash level thumbnail fallback proxy
+                const thumbUrl = d.yt ? `https://img.youtube.com/vi/${d.yt}/hqdefault.jpg` : '';
+
+                row.innerHTML = `
+                    <div class="row-left">
+                        <div class="row-rank">#${idx + 1}</div>
+                        ${thumbUrl ? `<img src="${thumbUrl}" class="row-thumb">` : '<div class="row-thumb"></div>'}
+                        <div class="row-info">
+                            <h4>${d.name}</h4>
+                            <p>By <strong>${d.creator}</strong></p>
                         </div>
                     </div>
-                    <div class="card-right">
-                        <div class="badge badge-points">${points} PTS</div>
-                        <div class="badge">${d.rating}% ENJOYMENT</div>
-                        ${isAdmin ? `
-                            <div style="display:flex; gap:6px;" onclick="event.stopPropagation()">
-                                <button class="btn-sm" onclick="move(${i}, -1)">▲</button>
-                                <button class="btn-sm" onclick="move(${i}, 1)">▼</button>
-                                <button class="btn-sm btn-danger" onclick="deleteDemon(${d.id})">✕</button>
+                    <div class="row-right">
+                        <div class="tag tag-pts">${points} PTS</div>
+                        <div class="tag">${d.enjoy}% ENJOY</div>
+                        ${userIsAdmin ? `
+                            <div style="display:flex; gap:4px;" onclick="event.stopPropagation()">
+                                <button class="btn-action" onclick="moveDemon(${idx}, -1)">▲</button>
+                                <button class="btn-action" onclick="moveDemon(${idx}, 1)">▼</button>
+                                <button class="btn-action btn-red" onclick="removeDemon(${d.id})">✕</button>
                             </div>
                         ` : ''}
                     </div>
                 `;
-                container.appendChild(card);
+                listContainer.appendChild(row);
             }
         });
-    }
 
-    function renderRecords() {
-        const tbody = document.getElementById('records-table');
-        tbody.innerHTML = records.map(r => `
+        // Render Admin Records Table
+        document.getElementById('admin-records-tbody').innerHTML = appData.records.map(r => `
             <tr>
                 <td><strong>${r.player}</strong></td>
                 <td>${r.levelName}</td>
                 <td>${r.progress}%</td>
                 <td>${r.fps}</td>
-                <td><span class="status-badge status-${r.status}">${r.status}</span></td>
+                <td><span class="status-pill st-${r.status}">${r.status}</span></td>
                 <td>
-                    <button class="btn-sm btn-green" onclick="setRecordStatus(${r.id}, 'approved')">Accept</button>
-                    <button class="btn-sm btn-danger" onclick="setRecordStatus(${r.id}, 'denied')">Deny</button>
+                    <button class="btn-action btn-green" onclick="setRecStatus(${r.id}, 'approved')">Accept</button>
+                    <button class="btn-action btn-red" onclick="setRecStatus(${r.id}, 'denied')">Deny</button>
                 </td>
             </tr>
         `).join('');
-    }
 
-    function renderBans() {
-        const tbody = document.getElementById('bans-table');
-        tbody.innerHTML = bannedPlayers.map(b => `
+        // Render Admin Bans Table
+        document.getElementById('admin-bans-tbody').innerHTML = appData.bans.map(b => `
             <tr>
                 <td><strong>${b.player}</strong></td>
                 <td>${b.reason}</td>
                 <td>${b.date}</td>
-                <td><button class="btn-sm btn-warn" onclick="unbanPlayer('${b.player}')">Unban</button></td>
+                <td><button class="btn-action" onclick="unbanUser('${b.player}')">Unban</button></td>
             </tr>
         `).join('');
     }
 
-    saveData();
+    renderApp();
 </script>
 </body>
 </html>
