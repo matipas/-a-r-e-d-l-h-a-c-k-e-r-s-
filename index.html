@@ -25,7 +25,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: var(--font-family); }
         body { background-color: var(--bg-main); color: var(--text-main); min-height: 100vh; padding-bottom: 60px; }
 
-        /* Top Navigation Header */
         header {
             background: #11131c;
             border-bottom: 1px solid var(--border-color);
@@ -53,7 +52,6 @@
         .main-layout { max-width: 1300px; margin: 24px auto; padding: 0 16px; display: grid; grid-template-columns: 320px 1fr; gap: 24px; }
         @media(max-width: 900px) { .main-layout { grid-template-columns: 1fr; } }
 
-        /* Sidebar Stats Panel */
         .sidebar { display: flex; flex-direction: column; gap: 16px; }
         .stat-card {
             background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 10px; padding: 20px;
@@ -67,7 +65,6 @@
         }
         .filter-input:focus { border-color: var(--accent-red); }
 
-        /* List Stack */
         .list-container { display: flex; flex-direction: column; gap: 10px; }
         
         .demon-row {
@@ -88,7 +85,6 @@
         .tag { background: #1a1e2c; border: 1px solid var(--border-color); padding: 5px 10px; border-radius: 6px; font-size: 0.78rem; font-weight: 700; }
         .tag-pts { color: var(--accent-yellow); background: rgba(243, 156, 18, 0.08); border-color: rgba(243, 156, 18, 0.25); }
 
-        /* Panels & Forms */
         .content-panel { display: none; }
         .content-panel.active { display: block; }
         
@@ -123,7 +119,6 @@
         .st-approved { background: rgba(46, 204, 113, 0.15); color: var(--accent-green); }
         .st-denied { background: rgba(255, 42, 77, 0.15); color: var(--accent-red); }
 
-        /* Modal View */
         .modal-bg { position: fixed; inset: 0; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 100; padding: 16px; }
         .modal-bg.open { display: flex; }
         .modal-card { background: var(--bg-card); border: 1px solid var(--border-color); border-radius: 12px; max-width: 680px; width: 100%; max-height: 90vh; overflow-y: auto; padding: 24px; position: relative; }
@@ -147,7 +142,6 @@
 
 <div class="main-layout">
     
-    <!-- LEFT SIDEBAR -->
     <div class="sidebar">
         <div class="stat-card">
             <h3>Total Extreme Demons</h3>
@@ -162,14 +156,11 @@
         </div>
     </div>
 
-    <!-- RIGHT CONTENT AREA -->
     <div>
-        <!-- LIST VIEW -->
         <div id="view-list" class="content-panel active">
             <div class="list-container" id="list-container-el"></div>
         </div>
 
-        <!-- SUBMIT RECORD VIEW -->
         <div id="view-submit" class="content-panel">
             <div class="admin-box">
                 <h3>Submit Completion Record</h3>
@@ -201,10 +192,7 @@
             </div>
         </div>
 
-        <!-- ADMIN MANAGEMENT VIEW -->
         <div id="view-admin" class="content-panel">
-            
-            <!-- ADD LEVEL -->
             <div class="admin-box">
                 <h3>1. Add / Insert Demon</h3>
                 <form onsubmit="handleAddDemon(event)">
@@ -238,7 +226,6 @@
                 </form>
             </div>
 
-            <!-- MANAGE RECORDS -->
             <div class="admin-box">
                 <h3>2. Moderation: Records Review</h3>
                 <div style="overflow-x:auto;">
@@ -258,7 +245,6 @@
                 </div>
             </div>
 
-            <!-- BAN LIST -->
             <div class="admin-box">
                 <h3>3. Ban List Control</h3>
                 <form onsubmit="handleBan(event)" style="margin-bottom: 14px;">
@@ -294,7 +280,6 @@
     </div>
 </div>
 
-<!-- LEVEL DETAILS MODAL -->
 <div id="details-modal" class="modal-bg" onclick="closeModal(event)">
     <div class="modal-card" onclick="event.stopPropagation()">
         <span class="modal-close" onclick="closeModal()">&times;</span>
@@ -307,7 +292,7 @@
 </div>
 
 <script>
-    let appData = JSON.parse(localStorage.getItem('aredl_exact_db_v1')) || {
+    let appData = JSON.parse(localStorage.getItem('aredl_exact_db_v2')) || {
         demons: [
             { id: 1, name: 'Avernus', creator: 'Paimon', levelId: '89230192', enjoy: 65, yt: '86m67v8gJkg' },
             { id: 2, name: 'Acheron', creator: 'rual', levelId: '84368584', enjoy: 80, yt: '7XqD3nZcMzA' },
@@ -323,14 +308,14 @@
     let userIsAdmin = false;
 
     function saveState() {
-        localStorage.setItem('aredl_exact_db_v1', JSON.stringify(appData));
+        localStorage.setItem('aredl_exact_db_v2', JSON.stringify(appData));
         renderApp();
     }
 
     function triggerAdmin() {
         if (!userIsAdmin) {
-            const pass = prompt("Enter AREDL Admin Password (default: admin123):");
-            if (pass === "admin123") {
+            const pass = prompt("Enter Admin Password:");
+            if (pass === "67") {
                 userIsAdmin = true;
                 document.getElementById('admin-nav-btn').classList.add('active-admin');
                 switchView('admin', document.getElementById('admin-nav-btn'));
@@ -463,11 +448,9 @@
         document.getElementById('stat-total-demons').innerText = appData.demons.length;
         document.getElementById('stat-total-records').innerText = appData.records.filter(r => r.status === 'approved').length;
 
-        // Populate Level Dropdown
         const selectEl = document.getElementById('sub-level');
         selectEl.innerHTML = appData.demons.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
 
-        // Render Demon List
         const filterText = document.getElementById('search-bar').value.toLowerCase();
         const listContainer = document.getElementById('list-container-el');
         listContainer.innerHTML = '';
@@ -479,7 +462,6 @@
                 row.onclick = () => openModal(idx);
 
                 const points = Math.max(5.0, (100 - idx * 2)).toFixed(1);
-                // Standard Geometry Dash level thumbnail fallback proxy
                 const thumbUrl = d.yt ? `https://img.youtube.com/vi/${d.yt}/hqdefault.jpg` : '';
 
                 row.innerHTML = `
@@ -507,7 +489,6 @@
             }
         });
 
-        // Render Admin Records Table
         document.getElementById('admin-records-tbody').innerHTML = appData.records.map(r => `
             <tr>
                 <td><strong>${r.player}</strong></td>
@@ -522,7 +503,6 @@
             </tr>
         `).join('');
 
-        // Render Admin Bans Table
         document.getElementById('admin-bans-tbody').innerHTML = appData.bans.map(b => `
             <tr>
                 <td><strong>${b.player}</strong></td>
